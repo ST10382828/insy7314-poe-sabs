@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: securbank-api
+    env: node
+    region: oregon # or your preferred region
+    plan: free # or starter/standard for production
+    buildCommand: cd server && npm install && npm run build
+    startCommand: cd server && npm start
+    healthCheckPath: /api/csrf-token
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3011
+      - key: MONGODB_URI
+        sync: false # Set this in Render dashboard
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: PASSWORD_PEPPER
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://your-netlify-site.netlify.app
+      - key: HTTPS_ONLY
+        value: false # Render handles HTTPS
