@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import Employee from "../models/Employee";
+import { Employee } from "../models/Employee";
 import bcrypt from "bcrypt";
 import { ENV } from "../config/env";
 
