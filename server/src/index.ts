@@ -12,6 +12,7 @@ import { securityMiddleware, enforceHttps } from "./middleware/security";
 import { SSLManager } from "./utils/ssl";
 import authRouter from "./routes/auth";
 import transactionRouter from "./routes/transactions";
+import seedRouter from "./routes/seed";
 
 const app = express();
 
@@ -84,6 +85,7 @@ app.get("/api/csrf-token", csrfProtection, (req, res) => {
 // Protected API routes
 app.use("/api/auth", csrfProtection, authRouter);
 app.use("/api/transactions", csrfProtection, transactionRouter);
+app.use("/api", seedRouter); // No CSRF needed for seed endpoint
 
 // Health check
 app.get("/api/health", (_req, res) => res.json({ status: "ok" }));

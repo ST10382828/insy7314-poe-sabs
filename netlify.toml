@@ -9,19 +9,19 @@
   # Node version
   NODE_VERSION = "18"
 
+# API proxy to your Render backend (must come BEFORE the catch-all redirect)
+[[redirects]]
+  from = "/api/*"
+  to = "https://insy-api.onrender.com/api/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
 # Redirect all requests to index.html for client-side routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-# API proxy to your Render backend
-[[redirects]]
-  from = "/api/*"
-  to = "https://your-app-name.onrender.com/api/:splat"
-  status = 200
-  force = true
-  headers = {X-From = "Netlify"}
 
 # Headers for security
 [[headers]]
