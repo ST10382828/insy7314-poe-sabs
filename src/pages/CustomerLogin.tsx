@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, ArrowLeft } from "lucide-react";
+import { Shield, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { customerLoginSchema, CustomerLoginInput } from "@/lib/validations";
 import { api } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,6 +17,7 @@ const CustomerLogin = () => {
   const { toast } = useToast();
   const { refreshAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
