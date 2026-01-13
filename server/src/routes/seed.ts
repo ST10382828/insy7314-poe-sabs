@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { Employee } from "../models/Employee";
+import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import { ENV } from "../config/env";
 
@@ -18,7 +18,7 @@ router.post("/seed-employees", async (req: Request, res: Response): Promise<void
     }
 
     // Check if employees already exist
-    const existingCount = await Employee.countDocuments();
+    const existingCount = await User.countDocuments({ role: "employee" });
     if (existingCount > 0) {
       res.status(400).json({ 
         error: "Employees already seeded", 
@@ -41,12 +41,13 @@ router.post("/seed-employees", async (req: Request, res: Response): Promise<void
         const hashedPassword = await bcrypt.hash(pepperedPassword, 12);
         return {
           username: emp.username,
-          hashedPassword,
+          passwordHash: hashedPassword,
+          role: "employee",
         };
       })
     );
 
-    await Employee.insertMany(hashedEmployees);
+    await User.insertMany(hashedEmployees);
 
     res.json({ 
       success: true, 
