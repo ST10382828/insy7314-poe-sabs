@@ -11,7 +11,7 @@ export const createTransactionSchema = z.object({
     .string()
     .regex(PATTERNS.amount, "Amount must be a valid number with up to 2 decimal places")
     .transform((val) => parseFloat(val))
-    .refine((val) => val > 0 && val <= 1000000, "Amount must be between $0.01 and $1,000,000"),
+    .refine((val) => val > 0, "Amount must be greater than $0"),
   currency: z.enum(["USD", "EUR", "GBP", "ZAR"]),
   provider: z.literal("SWIFT"),
   payeeAccountInfo: z
