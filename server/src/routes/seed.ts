@@ -63,7 +63,8 @@ router.post("/seed-employees", async (req: Request, res: Response): Promise<void
     });
   } catch (error) {
     console.error("Seed employees error:", error);
-    res.status(500).json({ error: "Failed to seed employees" });
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    res.status(500).json({ error: "Failed to seed employees", details: errorMessage });
   }
 });
 

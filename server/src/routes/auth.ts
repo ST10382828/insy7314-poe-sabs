@@ -147,6 +147,8 @@ router.post("/employee/login", authLimiter, bruteForceProtection.prevent, async 
       return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const { employeeNumber, password } = parsed.data;
+    
+    console.log(`[Employee Login] Attempting login with employeeNumber: ${employeeNumber}`);
 
     // For employee login, we'll use a simple approach where employeeNumber is the username
     // In production, you'd have a separate Employee model with proper authentication
@@ -156,10 +158,19 @@ router.post("/employee/login", authLimiter, bruteForceProtection.prevent, async 
         { idNumber: employeeNumber }
       ]
     });
-    if (!user) return res.status(401).json({ error: "Invalid credentials" });
+    
+    if (!user) {
+      console.log(`[Employee Login] User not found for: ${employeeNumber}`);
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
 
     const ok = await passwordSecurity.verifyPassword(password, user.passwordHash);
-    if (!ok) return res.status(401).json({ error: "Invalid credentials" });
+    if (!ok) {
+      console.log(`[Employee Login] Password verification failed for: ${employeeNumber}`);
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    console.log(`[Employee Login] Successful login for: ${employeeNumber}`);
 
     req.session.regenerate((err) => {
       if (err) return res.status(500).json({ error: "Session error" });
@@ -176,7 +187,7 @@ router.post("/employee/login", authLimiter, bruteForceProtection.prevent, async 
       });
     });
   } catch (err) {
-    console.error(err);
+    console.error("[Employee Login] Error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
