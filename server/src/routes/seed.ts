@@ -29,9 +29,9 @@ router.post("/seed-employees", async (req: Request, res: Response): Promise<void
 
     // Seed employees
     const employees = [
-      { username: "emp001", password: "SecurePass123!" },
-      { username: "emp002", password: "SecurePass456!" },
-      { username: "emp003", password: "SecurePass789!" },
+      { username: "emp001", password: "SecurePass123!", fullName: "Employee One", idNumber: "EMP001", accountNumber: "EMP001001", email: "emp001@securbank.local" },
+      { username: "emp002", password: "SecurePass456!", fullName: "Employee Two", idNumber: "EMP002", accountNumber: "EMP001002", email: "emp002@securbank.local" },
+      { username: "emp003", password: "SecurePass789!", fullName: "Employee Three", idNumber: "EMP003", accountNumber: "EMP001003", email: "emp003@securbank.local" },
     ];
 
     const pepper = ENV.PASSWORD_PEPPER || "";
@@ -41,8 +41,14 @@ router.post("/seed-employees", async (req: Request, res: Response): Promise<void
         const hashedPassword = await bcrypt.hash(pepperedPassword, 12);
         return {
           username: emp.username,
+          fullName: emp.fullName,
+          idNumber: emp.idNumber,
+          accountNumber: emp.accountNumber,
+          email: emp.email,
           passwordHash: hashedPassword,
-          role: "employee",
+          passwordHistory: [],
+          lockoutInfo: { failedAttempts: 0, lockoutUntil: null, lastAttempt: new Date() },
+          lastPasswordChange: new Date(),
         };
       })
     );
