@@ -17,15 +17,16 @@ router.post("/seed-employees", async (req: Request, res: Response): Promise<void
       return;
     }
 
-    // Check if employees already exist
-    const existingCount = await User.countDocuments({ role: "employee" });
-    if (existingCount > 0) {
-      res.status(400).json({ 
-        error: "Employees already seeded", 
-        count: existingCount 
-      });
-      return;
-    }
+    // Delete existing employees by username OR email OR idNumber
+    const deleteResult = await User.deleteMany({ 
+      $or: [
+        { username: { $in: ['emp001', 'emp002', 'emp003'] } },
+        { email: { $in: ['emp001@securbank.local', 'emp002@securbank.local', 'emp003@securbank.local'] } },
+        { idNumber: { $in: ['EMP001', 'EMP002', 'EMP003'] } }
+      ]
+    });
+    console.log(`Deleted ${deleteResult.deletedCount} existing employees`);
+
 
     // Seed employees
     const employees = [
